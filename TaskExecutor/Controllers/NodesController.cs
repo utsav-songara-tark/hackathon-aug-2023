@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TaskExecutor.Models;
+using TaskExecutor.Services;
 
 namespace TaskExecutor.Controllers
 {
@@ -12,12 +8,18 @@ namespace TaskExecutor.Controllers
     [ApiController]
     public class NodesController : ControllerBase
     {
+        private readonly WorkerService _workerService;
+
+        public NodesController(WorkerService workerService)
+        {
+            _workerService = workerService;
+        }
+
         [HttpPost]
         [Route("register")]
         public IActionResult RegisterNode([FromBody] NodeRegistrationRequest node)
         {
-            // TODO: Implement this method
-
+            _workerService.RegisterNode(node);
             return Ok();
         }
         
@@ -25,7 +27,15 @@ namespace TaskExecutor.Controllers
         [Route("unregister/{name}")]
         public IActionResult RegisterNode(string name)
         {
-            throw new NotImplementedException();
+            _workerService.UnregisterNode(name);
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("status")]
+        public IActionResult GetAvailableNodes()
+        {
+            return Ok(_workerService.GetNodes());
         }
     }
 }

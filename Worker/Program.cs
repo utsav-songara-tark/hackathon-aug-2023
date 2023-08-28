@@ -1,4 +1,5 @@
 using Worker;
+using Worker.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<WorkerRegistrar>();
+builder.Services.AddScoped<FileDownloader>();
 builder.Services.AddSingleton<WorkerInfo>(provider => provider.GetRequiredService<WorkerRegistrar>().GetWorkerInfo());
 
 var app = builder.Build();
